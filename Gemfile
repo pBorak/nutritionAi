@@ -12,6 +12,7 @@ gem "sidekiq"
 
 group :development, :test do
   gem "pry-rails"
+  gem "rspec-rails"
   gem "rubocop", "~> 0.77.0"
   gem "rubocop-performance"
   gem "rubocop-rails"
@@ -20,4 +21,10 @@ end
 
 group :development do
   gem "spring"
+end
+
+group :test do
+  gem "factory_bot_rails"
+  gem "shoulda-matchers", require: false
+  gem "simplecov", require: false
 end
