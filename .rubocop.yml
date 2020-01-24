@@ -104,7 +104,7 @@ Style/InlineComment:
   Description: 'Avoid inline comments.'
   Enabled: false
 
-Layout/LineLength:
+Metrics/LineLength:
   Description: 'Limit lines to 80 characters.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#80-character-limits'
   Max: 80
