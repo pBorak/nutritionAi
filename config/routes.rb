@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace :api, constraints: { format: "json" } do
     namespace :v1 do
       post "user_token" => "user_token#create"
+      resource :users
     end
   end
 end
