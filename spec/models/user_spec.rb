@@ -39,4 +39,8 @@ RSpec.describe User, type: :model do
       expect(user.errors.messages[:password]).to include(expected_error_message)
     end
   end
+
+  context "with associations" do
+    it { is_expected.to have_one(:profile).dependent(:destroy) }
+  end
 end
