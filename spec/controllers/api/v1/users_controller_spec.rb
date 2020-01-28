@@ -1,0 +1,148 @@
+require "rails_helper"
+
+RSpec.describe Api::V1::UsersController, type: :controller do
+  describe "#create" do
+    context "with valid params" do
+      it "creates user and profile" do
+        params = {
+          user: {
+            email: "user@example.com",
+            first_name: "John",
+            last_name: "Doe",
+            password: "password",
+            password_confirmation: "password",
+          },
+          profile: {
+            sex: "male",
+            calorie_spread_ratio: 0.2,
+            fat_ratio: 0.2,
+            protein_ratio: 2.0,
+            activity_level: 1,
+          },
+        }
+
+        post :create, params: params, as: :json
+
+        expected_response = {
+          id: User.last.id,
+          email: "user@example.com",
+          first_name: "John",
+          last_name: "Doe",
+          profile: {
+            id: Profile.last.id,
+            sex: "male",
+            calorie_spread_ratio: 0.2,
+            fat_ratio: 0.2,
+            protein_ratio: 2.0,
+            activity_level: 1,
+          },
+        }
+
+        expect(response.code).to eql("200")
+        expect(User.count).to be(1)
+        expect(Profile.count).to be(1)
+        expect(response.body).to be_json_eql(expected_response.to_json)
+      end
+    end
+
+    context "with invalid user params" do
+      it "respond with validation errors and 422 status" do
+        params = {
+          user: {
+            email: "invalid",
+            first_name: "John",
+            last_name: "Doe",
+            password: "pass",
+            password_confirmation: "pass",
+          },
+          profile: {
+            sex: "male",
+            calorie_spread_ratio: 0.2,
+            fat_ratio: 0.2,
+            protein_ratio: 2.0,
+            activity_level: 1,
+          },
+        }
+
+        post :create, params: params, as: :json
+
+        email_error = build_validation_errors("email", "is invalid")
+        password_error = build_validation_errors(
+          "password", "is too short (minimum is 6 characters)"
+        )
+        expect(response.body).to include_json(email_error)
+        expect(response.body).to include_json(password_error)
+        expect(response.code).to eql("422")
+      end
+    end
+
+    context "with invalid profile params" do
+      it "respond with validation errors and 422 status" do
+        params = {
+          user: {
+            email: "test@example.com",
+            first_name: "John",
+            last_name: "Doe",
+            password: "password",
+            password_confirmation: "password",
+          },
+          profile: {
+            sex: "male",
+            calorie_spread_ratio: 0.2,
+            fat_ratio: 0.2,
+            protein_ratio: 10,
+            activity_level: 1,
+          },
+        }
+
+        post :create, params: params, as: :json
+
+        protien_ratio_error = build_validation_errors(
+          "protein_ratio", "must be less than or equal to 2.6"
+        )
+        expect(response.code).to eql("422")
+        expect(response.body).to include_json(protien_ratio_error)
+      end
+    end
+
+    context "with both invalid profile  and user params" do
+      it "respond with validation errors and 422 status" do
+        params = {
+          user: {
+            email: "test@example.com",
+            last_name: "Doe",
+            password: "password",
+            password_confirmation: "password",
+          },
+          profile: {
+            sex: "male",
+            calorie_spread_ratio: 0.2,
+            fat_ratio: 0.2,
+            protein_ratio: 2.0,
+            activity_level: 0,
+          },
+        }
+
+        post :create, params: params, as: :json
+
+        first_name_error = build_validation_errors(
+          "first_name", "can't be blank"
+        )
+        activity_level_error = build_validation_errors(
+          "activity_level", "must be greater than or equal to 1.0"
+        )
+        expect(response.code).to eql("422")
+        expect(response.body).to include_json(first_name_error)
+        expect(response.body).to include_json(activity_level_error)
+      end
+    end
+  end
+
+  def build_validation_errors(field, code)
+    {
+      "resource": "user",
+      "field": field,
+      "code": code,
+    }.to_json
+  end
+end
