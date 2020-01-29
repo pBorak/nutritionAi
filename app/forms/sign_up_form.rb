@@ -60,8 +60,8 @@ class SignUpForm
   end
 
   def promote_errors(child_errors)
-    child_errors.each do |attribute, message|
-      errors.add(attribute, message)
+    child_errors.details.each do |attribute, values|
+      errors.add(attribute, values.first[:error])
     end
   end
 end
