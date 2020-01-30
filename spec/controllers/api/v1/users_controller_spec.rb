@@ -65,11 +65,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         }
 
         post :create, params: params, as: :json
-
-        email_error = build_validation_errors("email", "is invalid")
-        password_error = build_validation_errors(
-          "password", "is too short (minimum is 6 characters)"
-        )
+        email_error = build_validation_errors("email", "invalid")
+        password_error = build_validation_errors("password", "too_short")
         expect(response.body).to include_json(email_error)
         expect(response.body).to include_json(password_error)
         expect(response.code).to eql("422")
@@ -98,7 +95,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         post :create, params: params, as: :json
 
         protien_ratio_error = build_validation_errors(
-          "protein_ratio", "must be less than or equal to 2.6"
+          "protein_ratio", "too_small"
         )
         expect(response.code).to eql("422")
         expect(response.body).to include_json(protien_ratio_error)
@@ -126,10 +123,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         post :create, params: params, as: :json
 
         first_name_error = build_validation_errors(
-          "first_name", "can't be blank"
+          "first_name", "blank"
         )
         activity_level_error = build_validation_errors(
-          "activity_level", "must be greater than or equal to 1.0"
+          "activity_level", "too_big"
         )
         expect(response.code).to eql("422")
         expect(response.body).to include_json(first_name_error)
