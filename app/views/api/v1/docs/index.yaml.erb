@@ -1,0 +1,158 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: NutritionAi
+host: <%= request.host_with_port %>
+basePath: /api/v1/
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+responses:
+  404:
+    description: Not Found
+
+paths:
+  /user_token:
+    post:
+      tags:
+        - Authentication
+      parameters:
+        - in: formData
+          name: auth[email]
+          required: true
+          type: string
+        - in: formData
+          name: auth[password]
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              jwt:
+                type: string
+                example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODAzMzYwMDcsInN1YiI6MX0.4PV3D3U3lGv8XLonFQcpMTxzM83VWtcelPkRwbR0qK0"
+        404:
+          $ref: "#/responses/404"
+  /users:
+    post:
+      tags:
+        - Users
+      parameters:
+        - in: body
+          name: params
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: example@example.com
+                  password:
+                    type: string
+                    example: password
+                  password_confirmation:
+                    type: string
+                    example: password
+                  first_name:
+                    type: string
+                    example: John
+                  last_name:
+                    type: string
+                    example: Doe
+              profile:
+                type: object
+                properties:
+                  sex:
+                    type: string
+                    example: male
+                  calorie_spread_ratio:
+                    type: float
+                    example: 0.2
+                  fat_ratio:
+                    type: float
+                    example: 0.2
+                  protein_ratio:
+                    type: float
+                    example: 2.6
+                  activity_level:
+                    type: number
+                    example: 2
+      responses:
+        200:
+          description: OK
+        404:
+          $ref: "#/responses/404"
+        422:
+          description: Validation Error
+          schema:
+            type: object
+            example:
+              - resource: user
+                field: mail
+                code: taken
+              - resource: user
+                field: mail
+                code: blank
+              - resource: user
+                field: mail
+                code: invalid
+              - resource: user
+                field: password
+                code: blank
+              - resource: user
+                field: password
+                code: too_short
+              - resource: user
+                field: password_confirmation
+                code: confirmation
+              - resource: user
+                field: sex
+                code: inclusion
+              - resource: user
+                field: calorie_spread_ratio
+                code: not_a_number
+              - resource: user
+                field: calorie_spread_ratio
+                code: too_small
+              - resource: user
+                field: calorie_spread_ratio
+                code: too_big
+              - resource: user
+                field: protein_ratio
+                code: not_a_number
+              - resource: user
+                field: protein_ratio
+                code: too_small
+              - resource: user
+                field: protein_ratio
+                code: too_big
+              - resource: user
+                field: fat_ratio
+                code: not_a_number
+              - resource: user
+                field: fat_ratio
+                code: too_small
+              - resource: user
+                field: fat_ratio
+                code: too_big
+              - resource: user
+                field: activity_level
+                code: not_an_integer
+              - resource: user
+                field: activity_level
+                code: not_a_number
+              - resource: user
+                field: activity_level
+                code: too_small
+              - resource: user
+                field: activity_level
+                code: too_big
+
+
