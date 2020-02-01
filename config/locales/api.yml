@@ -1,6 +1,6 @@
 api:
   resources:
-    sign_up_form: user
+    sign_up_form: User
   errors:
     codes:
       less_than_or_equal_to: too_small

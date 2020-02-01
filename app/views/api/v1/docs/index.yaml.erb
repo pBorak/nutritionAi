@@ -93,66 +93,71 @@ paths:
           description: Validation Error
           schema:
             type: object
-            example:
-              - resource: user
-                field: mail
-                code: taken
-              - resource: user
-                field: mail
-                code: blank
-              - resource: user
-                field: mail
-                code: invalid
-              - resource: user
-                field: password
-                code: blank
-              - resource: user
-                field: password
-                code: too_short
-              - resource: user
-                field: password_confirmation
-                code: confirmation
-              - resource: user
-                field: sex
-                code: inclusion
-              - resource: user
-                field: calorie_spread_ratio
-                code: not_a_number
-              - resource: user
-                field: calorie_spread_ratio
-                code: too_small
-              - resource: user
-                field: calorie_spread_ratio
-                code: too_big
-              - resource: user
-                field: protein_ratio
-                code: not_a_number
-              - resource: user
-                field: protein_ratio
-                code: too_small
-              - resource: user
-                field: protein_ratio
-                code: too_big
-              - resource: user
-                field: fat_ratio
-                code: not_a_number
-              - resource: user
-                field: fat_ratio
-                code: too_small
-              - resource: user
-                field: fat_ratio
-                code: too_big
-              - resource: user
-                field: activity_level
-                code: not_an_integer
-              - resource: user
-                field: activity_level
-                code: not_a_number
-              - resource: user
-                field: activity_level
-                code: too_small
-              - resource: user
-                field: activity_level
-                code: too_big
+            properties:
+              message:
+                example: Validation Failed
+              errors:
+                example:
+                  - resource: User
+                    field: mail
+                    code: taken
+                  - resource: User
+                    field: mail
+                    code: blank
+                  - resource: User
+                    field: mail
+                    code: invalid
+                  - resource: User
+                    field: password
+                    code: blank
+                  - resource: User
+                    field: password
+                    code: too_short
+                  - resource: User
+                    field: password_confirmation
+                    code: confirmation
+                  - resource: User
+                    field: sex
+                    code: inclusion
+                  - resource: User
+                    field: calorie_spread_ratio
+                    code: not_a_number
+                  - resource: User
+                    field: calorie_spread_ratio
+                    code: too_small
+                  - resource: User
+                    field: calorie_spread_ratio
+                    code: too_big
+                  - resource: User
+                    field: protein_ratio
+                    code: not_a_number
+                  - resource: User
+                    field: protein_ratio
+                    code: too_small
+                  - resource: User
+                    field: protein_ratio
+                    code: too_big
+                  - resource: User
+                    field: fat_ratio
+                    code: not_a_number
+                  - resource: User
+                    field: fat_ratio
+                    code: too_small
+                  - resource: User
+                    field: fat_ratio
+                    code: too_big
+                  - resource: User
+                    field: activity_level
+                    code: not_an_integer
+                  - resource: User
+                    field: activity_level
+                    code: not_a_number
+                  - resource: User
+                    field: activity_level
+                    code: too_small
+                  - resource: User
+                    field: activity_level
+                    code: too_big
+
 
 
