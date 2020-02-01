@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   namespace :api, constraints: { format: "json" } do
     namespace :v1 do
       post "user_token" => "user_token#create"
-      resource :users
+      resources :users, only: %i[create show]
 
       resources :docs, only: [:index], constraints: { format: "yaml" }
     end

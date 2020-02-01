@@ -10,8 +10,30 @@ securityDefinitions:
     name: Authorization
     in: header
 responses:
+  200:
+    description: Ok
+  401:
+    description: Unauthorized
+  403:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Forbidden
+        code:
+          type: string
+          example: forbidden
   404:
-    description: Not Found
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Not Found
+        code:
+          type: string
+          example: not_found
 
 paths:
   /user_token:
@@ -28,8 +50,8 @@ paths:
           required: true
           type: string
       responses:
-        200:
-          description: OK
+        201:
+          description: Success
           schema:
             type: object
             properties:
@@ -37,7 +59,7 @@ paths:
                 type: string
                 example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODAzMzYwMDcsInN1YiI6MX0.4PV3D3U3lGv8XLonFQcpMTxzM83VWtcelPkRwbR0qK0"
         404:
-          $ref: "#/responses/404"
+          description: Not Found
   /users:
     post:
       tags:
@@ -86,9 +108,7 @@ paths:
                     example: 2
       responses:
         200:
-          description: OK
-        404:
-          $ref: "#/responses/404"
+          $ref: '#/responses/200'
         422:
           description: Validation Error
           schema:
@@ -158,6 +178,23 @@ paths:
                   - resource: User
                     field: activity_level
                     code: too_big
-
-
-
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+      responses:
+        200:
+          $ref: '#/responses/200'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        404:
+          $ref: '#/responses/403'
