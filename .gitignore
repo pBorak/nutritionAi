@@ -14,6 +14,5 @@ tags
 dump.rdb
 /test_results
 config/master.key
-/config/database.yml
 /config/sidekiq.yml
 /config/env.yml

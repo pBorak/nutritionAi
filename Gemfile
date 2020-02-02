@@ -16,6 +16,8 @@ gem "responders"
 gem "sidekiq"
 
 group :development, :test do
+  gem "brakeman", "4.3.1", require: false
+  gem "immigrant"
   gem "pry-rails"
   gem "rspec-rails", "~> 4.0.0.beta3"
   gem "rubocop", "~> 0.77.0"
