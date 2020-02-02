@@ -1,0 +1,63 @@
+version: 2.1
+jobs:
+  build:
+    parallelism: 3
+    docker:
+      - image: circleci/ruby:2.6.3-buster-node-browsers
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          PGHOST: 127.0.0.1
+          PGUSER: circleci-nutritionai_test
+          RAILS_ENV: test
+      - image: circleci/postgres:9.5-alpine
+        environment:
+          POSTGRES_USER: circleci-nutritionai_test
+          POSTGRES_DB: nutritionai_test
+          POSTGRES_PASSWORD: ''
+    steps:
+      - checkout
+
+      - run:
+          name: Configure Bundler
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
+
+        # Which version of bundler?
+      - run:
+          name: Which bundler?
+          command: bundle -v
+
+        # Restore bundle cache
+      - restore_cache:
+          keys:
+            - nutritionai-{{ checksum "Gemfile.lock" }}
+            - nutritionai-
+
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install
+
+        # Store bundle cache
+      - save_cache:
+          key: nutritionai-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
+
+      - run:
+          command: bundle exec rake
