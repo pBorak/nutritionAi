@@ -1,12 +1,18 @@
 module Api
   module V1
     class UsersController < BaseController
-      before_action :authenticate_user, except: [:create]
+      before_action :authenticate_user, only: %i[show]
 
       def create
         @sign_up_form = SignUpForm.new(user_params.merge(profile_params))
         @sign_up_form.save
         respond_with @sign_up_form
+      end
+
+      def show
+        @user = User.find(params[:id])
+        authorize @user
+        respond_with current_user
       end
 
       private

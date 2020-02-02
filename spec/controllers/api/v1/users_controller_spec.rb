@@ -141,6 +141,57 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
   end
 
+  describe "#show" do
+    it "requires authorization" do
+      get :show, params: { id: "1" }, as: :json
+
+      expect(response.code).to eql("401")
+    end
+
+    context "when current_user is the owner of resource" do
+      it "responds with user info" do
+        user = FactoryBot.create(:user)
+        sign_in_user(user)
+        expected_response = {
+          id: user.id,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+        }
+
+        get :show, params: { id: user.id }, as: :json
+
+        expect(response.code).to eql("200")
+        expect(response.body).to eql(expected_response.to_json)
+      end
+    end
+
+    context "when current_user is not the owner of the resource" do
+      it "responds with forbidden status" do
+        user = FactoryBot.create(:user)
+        user1 = FactoryBot.create(:user)
+
+        sign_in_user(user)
+
+        get :show, params: { id: user1.id }, as: :json
+
+        expect(response.code).to eql("403")
+      end
+    end
+
+    context "when user is not present" do
+      it "responds with not found status" do
+        user = FactoryBot.create(:user, id: 1)
+
+        sign_in_user(user)
+
+        get :show, params: { id: 2 }, as: :json
+
+        expect(response.code).to eql("404")
+      end
+    end
+  end
+
   def build_validation_errors(field, code)
     {
       "resource": "User",
