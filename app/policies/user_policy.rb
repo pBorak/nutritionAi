@@ -9,4 +9,6 @@ class UserPolicy
   def show?
     user == resource
   end
+
+  alias update? show?
 end

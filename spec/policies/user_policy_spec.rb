@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe UserPolicy do
-  permissions :show? do
+  permissions :show?, :update? do
     it "grants access when user is the owner of resource" do
       current_user = FactoryBot.build_stubbed(:user, id: 1)
 

@@ -6,5 +6,5 @@ class User < ApplicationRecord
 
   validates :first_name, :last_name, presence: true
   validates :email, uniqueness: true, format: EMAIL_REGEX, presence: true
-  validates :password, length: { minimum: 6 }, presence: true
+  validates :password, length: { minimum: 6 }, presence: true, allow_nil: true
 end

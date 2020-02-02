@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < BaseController
-      before_action :authenticate_user, only: %i[show]
+      before_action :authenticate_user, only: %i[show update]
 
       def create
         @sign_up_form = SignUpForm.new(user_params.merge(profile_params))
@@ -12,7 +12,14 @@ module Api
       def show
         @user = User.find(params[:id])
         authorize @user
-        respond_with current_user
+        respond_with @user
+      end
+
+      def update
+        @user = User.find(params[:id])
+        authorize @user
+        @user.update!(user_params)
+        respond_with @user
       end
 
       private
