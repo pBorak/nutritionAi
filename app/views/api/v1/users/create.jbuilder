@@ -1,10 +1,4 @@
-json.extract!(
-  @sign_up_form.user,
-  :id,
-  :email,
-  :first_name,
-  :last_name,
-)
+json.partial! "user", user: @sign_up_form.user
 json.profile do
   json.extract!(
     @sign_up_form.profile,

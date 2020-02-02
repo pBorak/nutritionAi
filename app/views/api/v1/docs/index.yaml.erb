@@ -109,6 +109,9 @@ paths:
       responses:
         200:
           $ref: '#/responses/200'
+          schema:
+            type: object
+            $ref: '#/definitions/UserWithProfile'
         422:
           description: Validation Error
           schema:
@@ -119,14 +122,20 @@ paths:
               errors:
                 example:
                   - resource: User
-                    field: mail
+                    field: email
                     code: taken
                   - resource: User
-                    field: mail
+                    field: email
                     code: blank
                   - resource: User
-                    field: mail
+                    field: email
                     code: invalid
+                  - resource: User
+                    field: first_name
+                    code: blank
+                  - resource: User
+                    field: last_name
+                    code: blank
                   - resource: User
                     field: password
                     code: blank
@@ -192,9 +201,132 @@ paths:
       responses:
         200:
           $ref: '#/responses/200'
+          schema:
+            $ref: '#/definitions/User'
         401:
           $ref: '#/responses/401'
         403:
           $ref: '#/responses/403'
         404:
+          $ref: '#/responses/404'
+    put:
+      tags:
+        - Users
+      security:
+        - Bearer: []
+      parameters:
+      - in: path
+        name: id
+        type: string
+        required: true
+      - in: body
+        name: params
+        schema:
+          type: object
+          properties:
+            user:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@example.com
+                password:
+                  type: string
+                  example: password
+                password_confirmation:
+                  type: string
+                  example: password
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Doe
+      responses:
+        200:
+          $ref: '#/responses/200'
+          schema:
+            $ref: '#/definitions/User'
+        401:
+          $ref: '#/responses/401'
+        403:
           $ref: '#/responses/403'
+        404:
+          $ref: '#/responses/404'
+        422:
+          description: Validation Error
+          schema:
+            type: object
+            properties:
+              message:
+                example: Validation Failed
+              errors:
+                example:
+                  - resource: User
+                    field: email
+                    code: taken
+                  - resource: User
+                    field: email
+                    code: blank
+                  - resource: User
+                    field: email
+                    code: invalid
+                  - resource: User
+                    field: first_name
+                    code: blank
+                  - resource: User
+                    field: last_name
+                    code: blank
+                  - resource: User
+                    field: password
+                    code: blank
+                  - resource: User
+                    field: password
+                    code: too_short
+                  - resource: User
+                    field: password_confirmation
+                    code: confirmation
+
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      email:
+        type: string
+        example: info@example.com
+      first_name:
+        type: string
+        example: John
+      last_name:
+        type: string
+        example: Doe
+  Profile:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      sex:
+        type: string
+        enum: [male, female]
+      calorie_spread_ratio:
+        type: float
+        example: 0.2
+      fat_ratio:
+        type: float
+        example: 0.2
+      protein_ratio:
+        type: float
+        example: 2.6
+      activity_level:
+        type: number
+        example: 2
+  UserWithProfile:
+    type: object
+    $ref: '#/definitions/User'
+    properties:
+      profile:
+        $ref: '#/definitions/Profile'
