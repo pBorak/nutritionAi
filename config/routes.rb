@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "user_token" => "user_token#create"
       resources :users, only: %i[create show update]
+      resources :profiles, only: %i[show]
 
       resources :docs, only: [:index], constraints: { format: "yaml" }
     end
