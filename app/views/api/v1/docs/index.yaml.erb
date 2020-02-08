@@ -153,28 +153,28 @@ paths:
                     code: not_a_number
                   - resource: User
                     field: calorie_spread_ratio
-                    code: too_small
+                    code: too_low
                   - resource: User
                     field: calorie_spread_ratio
-                    code: too_big
+                    code: too_high
                   - resource: User
                     field: protein_ratio
                     code: not_a_number
                   - resource: User
                     field: protein_ratio
-                    code: too_small
+                    code: too_low
                   - resource: User
                     field: protein_ratio
-                    code: too_big
+                    code: too_high
                   - resource: User
                     field: fat_ratio
                     code: not_a_number
                   - resource: User
                     field: fat_ratio
-                    code: too_small
+                    code: too_low
                   - resource: User
                     field: fat_ratio
-                    code: too_big
+                    code: too_high
                   - resource: User
                     field: activity_level
                     code: not_an_integer
@@ -183,7 +183,7 @@ paths:
                     code: not_a_number
                   - resource: User
                     field: activity_level
-                    code: too_small
+                    code: too_low
                   - resource: User
                     field: activity_level
                     code: too_big
@@ -308,6 +308,101 @@ paths:
           $ref: '#/responses/403'
         404:
           $ref: '#/responses/404'
+    put:
+      tags:
+        - Profiles
+      security:
+        - Bearer: []
+      parameters:
+      - in: path
+        name: id
+        type: string
+        required: true
+      - in: body
+        name: params
+        schema:
+          type: object
+          properties:
+            profile:
+              type: object
+              properties:
+                sex:
+                  type: string
+                  example: male
+                calorie_spread_ratio:
+                  type: float
+                  example: 0.2
+                fat_ratio:
+                  type: float
+                  example: 0.2
+                protein_ratio:
+                  type: float
+                  example: 2.6
+                activity_level:
+                  type: number
+                  example: 2
+      responses:
+        200:
+          $ref: '#/responses/200'
+          schema:
+            $ref: '#/definitions/Profile'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        404:
+          $ref: '#/responses/404'
+        422:
+          description: Validation Error
+          schema:
+            type: object
+            properties:
+              message:
+                example: Validation Failed
+              errors:
+                example:
+                  - resource: Profile
+                    field: sex
+                    code: inclusion
+                  - resource: Profile
+                    field: calorie_spread_ratio
+                    code: not_a_number
+                  - resource: Profile
+                    field: calorie_spread_ratio
+                    code: too_low
+                  - resource: Profile
+                    field: calorie_spread_ratio
+                    code: too_high
+                  - resource: Profile
+                    field: protein_ratio
+                    code: not_a_number
+                  - resource: Profile
+                    field: protein_ratio
+                    code: too_low
+                  - resource: Profile
+                    field: protein_ratio
+                    code: too_high
+                  - resource: Profile
+                    field: fat_ratio
+                    code: not_a_number
+                  - resource: Profile
+                    field: fat_ratio
+                    code: too_low
+                  - resource: Profile
+                    field: fat_ratio
+                    code: too_high
+                  - resource: Profile
+                    field: activity_level
+                    code: not_an_integer
+                  - resource: Profile
+                    field: activity_level
+                    code: not_a_number
+                  - resource: Profile
+                    field: activity_level
+                    code: too_low
+                  - resource: Profile
+                    field: activity_level
+                    code: too_big
 
 
 definitions:

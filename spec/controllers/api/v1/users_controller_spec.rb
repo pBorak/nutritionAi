@@ -66,8 +66,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
         post :create, params: params, as: :json
 
-        email_error = build_validation_errors("email", "invalid")
-        password_error = build_validation_errors("password", "too_short")
+        email_error = build_validation_errors("User", "email", "invalid")
+        password_error = build_validation_errors(
+          "User", "password", "too_short"
+        )
         expect(response.body).to include_json(email_error)
           .at_path("errors")
         expect(response.body).to include_json(password_error)
@@ -98,7 +100,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         post :create, params: params, as: :json
 
         protien_ratio_error = build_validation_errors(
-          "protein_ratio", "too_small"
+          "User", "protein_ratio", "too_high"
         )
         expect(response.code).to eql("422")
         expect(response.body).to include_json(protien_ratio_error)
@@ -127,10 +129,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         post :create, params: params, as: :json
 
         first_name_error = build_validation_errors(
-          "first_name", "blank"
+          "User", "first_name", "blank"
         )
         activity_level_error = build_validation_errors(
-          "activity_level", "too_big"
+          "User", "activity_level", "too_low"
         )
         expect(response.code).to eql("422")
         expect(response.body).to include_json(first_name_error)
@@ -261,7 +263,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
         put :update, params: params, as: :json
 
-        email_error = build_validation_errors("email", "taken")
+        email_error = build_validation_errors("User", "email", "taken")
         expect(response.code).to eql("422")
         expect(response.body).to include_json(email_error)
           .at_path("errors")
@@ -277,7 +279,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
         put :update, params: params, as: :json
 
-        passsword_error = build_validation_errors("password", "too_short")
+        passsword_error = build_validation_errors(
+          "User", "password", "too_short"
+        )
         expect(response.code).to eql("422")
         expect(response.body).to include_json(passsword_error).at_path("errors")
       end
@@ -295,13 +299,5 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response.code).to eql("403")
       end
     end
-  end
-
-  def build_validation_errors(field, code)
-    {
-      "resource": "User",
-      "field": field,
-      "code": code,
-    }.to_json
   end
 end
