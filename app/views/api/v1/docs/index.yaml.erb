@@ -286,6 +286,29 @@ paths:
                   - resource: User
                     field: password_confirmation
                     code: confirmation
+  /profiles/{id}:
+    get:
+      tags:
+        - Profiles
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+      responses:
+        200:
+          $ref: '#/responses/200'
+          schema:
+            $ref: '#/definitions/Profile'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        404:
+          $ref: '#/responses/404'
+
 
 definitions:
   User:

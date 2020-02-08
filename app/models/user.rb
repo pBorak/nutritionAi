@@ -7,4 +7,12 @@ class User < ApplicationRecord
   validates :first_name, :last_name, presence: true
   validates :email, uniqueness: true, format: EMAIL_REGEX, presence: true
   validates :password, length: { minimum: 6 }, presence: true, allow_nil: true
+
+  delegate(
+    :sex,
+    :calorie_spread_ratio,
+    :fat_ratio,
+    :protein_ratio,
+    :activity_level, to: :profile
+  )
 end
