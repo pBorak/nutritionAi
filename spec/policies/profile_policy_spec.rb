@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ProfilePolicy do
-  permissions :show? do
+  permissions :show?, :update? do
     it "grants access when profile belongs to user" do
       current_user = FactoryBot.build_stubbed(:user)
       profile = FactoryBot.build_stubbed(:profile, user: current_user)

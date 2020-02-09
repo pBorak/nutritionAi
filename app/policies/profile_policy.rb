@@ -9,4 +9,6 @@ class ProfilePolicy
   def show?
     user.profile == resource
   end
+
+  alias update? show?
 end
